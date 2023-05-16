@@ -1,0 +1,256 @@
+<html>
+<head>
+
+    <link rel="stylesheet" href="stylingForm.css">
+</head>
+<body>
+    <div class="container">
+        <form name="ProfileForm" onsubmit="return CheckInputs();" action="https://suite10.emarsys.net/u/register.php" method=get>
+            <input type=hidden name="CID" value="760552761">
+            <input type=hidden name="SID" value="<? echo $SID; ?>">
+            <input type=hidden name="UID" value="<? echo $UID; ?>">
+            <input type=hidden name="f" value="1824">
+            <input type=hidden name="p" value="2">
+            <input type=hidden name="a" value="r">
+            <input type=hidden name="el" value="<? echo $el; ?>">
+            <input type=hidden name="llid" value="<? echo $llid; ?>">
+            <input type=hidden name="c" value="<? echo $c; ?>">
+            <input type=hidden name="counted" value="<? echo $counted; ?>">
+            <input type=hidden name="RID" value="<? echo $RID; ?>">
+            <input type=hidden name="mailnow" value="<? echo $mailnow; ?>">
+
+            <div class="inputRow">
+                <label class="inputs" for="">Salutation:</label> 
+                <select name="inp_46" size=1>
+                    <option value=""> </option>
+                    <option value="6"<? echo $inp_46=="Mx." ? " SELECTED" : ""; ?>Mx.</option>
+                    <option value="1"<? echo $inp_46=="Mr." ? " SELECTED" : ""; ?>Mr.</option>
+                    <option value="2"<? echo $inp_46=="Ms." ? " SELECTED" : ""; ?>Ms.</option>
+                </select> 
+            </div>
+            <div class="inputRow">
+                <label class="inputs" for="">First Name:</label> 
+                <input type=text name="inp_1" maxlength=60 value=''>
+            </div>
+            <div class="inputRow">
+                <label class="inputs" for="">Last Name:</label> 
+                <input type=text name="inp_2" maxlength=60 value="">
+            </div>
+            <div class="inputRow">
+                <label class="inputs" for="">Email:</label> 
+                <input type=text name="inp_3" maxlength=255 value="">
+            </div>
+               
+        <input tabindex='882' type=checkbox name="optin" value="y" <? echo $optin == "True" ? " CHECKED" : ""; ?> Ich willige dazu ein, dass Läderach die eingegebenen Daten verarbeiten und nutzen darf, um mit einem E-Mail-Newsletter zu informieren. Diese Einwilligung kann jederzeit durch eine Email an datenschutz@laederach.com widerrufen werden. Weitere Informationen finden Sie auch hier: Datenschutzbestimmungen.*<br>
+        <input class="button" aria-label='Register' tabindex='993' type=button onclick="javascript:SubmitIt()" name="submit1" value="Register">
+    </form>
+</div>
+
+<script language="javascript">
+<!--
+function onbeforesubmit()
+{
+return true;
+}
+//-->
+</script>
+<script language="javascript">
+<!--
+	var error;
+var form_lanuage = 'en';
+function is_0_valid(){
+  count = 0;
+  if(document.ProfileForm.optin){
+    if(document.ProfileForm.optin.checked){
+      if(document.getElementsByName('interest[]')){
+        if(document.getElementsByName('interest[]').length > 0 ){
+          Interest = document.getElementsByName('interest[]');
+          for(i = 0 ; i < Interest.length;i++){
+           if(Interest[i].checked)
+         ++count;
+ }
+          if(count == 0){
+            error  += "Interests:";
+            return false;
+  }
+        }
+      }
+    }
+  }
+ return  true;
+}
+function is_46_valid(input)
+{
+	if(input == "")
+	{
+		error += "Salutation: missing data!\n";
+		return false;
+	}
+
+	return true;
+}
+function is_1_valid(input)
+{
+	if(input == "")
+	{
+		error += "First Name: missing data!\n";
+		return false;
+	}
+
+	return true;
+}
+function is_2_valid(input)
+{
+	if(input == "")
+	{
+		error += "Last Name: missing data!\n";
+		return false;
+	}
+
+	return true;
+}
+function is_3_valid(input)
+{
+	if(input == "")
+	{
+		error += "Email: missing data!\n";
+		return false;
+	}
+
+var emailPat=/^(.+)@(.+)$/
+var specialChars="\\(\\)<>@,;:\\\\\\\"\\.\\[\\]"
+var validChars="\[^\\s" + specialChars + "\]"
+var quotedUser="(\"[^\"]*\")"
+var ipDomainPat=/^\[(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\]$/
+var atom=validChars + '+'
+var word="(" + atom + "|" + quotedUser + ")"
+var userPat=new RegExp("^" + word + "(\\." + word + ")*$")
+var domainPat=new RegExp("^" + atom + "(\\." + atom +")*$")
+
+
+var matchArray=input.match(emailPat)
+if (matchArray==null) {
+error += "E-Mail: Please enter a valid e-mail address!\n"; // check @ and .
+return false
+}
+var user=matchArray[1]
+var domain=matchArray[2]
+
+if (user.match(userPat)==null) {
+error += "E-Mail: Please enter a valid e-mail address!\n"; // username doesn't seem to be valid
+return false
+}
+
+var IPArray=domain.match(ipDomainPat)
+if (IPArray!=null) {
+  for (var i=1;i<=4;i++) {
+    if (IPArray[i]>255) {
+error += "E-Mail: Please enter a valid e-mail address!\n"; // Destination IP address is invalid
+return false
+    }
+    }
+    return true
+}
+
+var domainArray=domain.match(domainPat)
+if (domainArray==null) {
+error += "E-Mail: Please enter a valid e-mail address!\n"; // The domain name doesn't seem to be valid
+   return false
+}
+
+var atomPat=new RegExp(atom,"g")
+var domArr=domain.match(atomPat)
+var len=domArr.length
+
+
+if (len<2) {
+error += "E-Mail: Please enter a valid e-mail address!\n"; // This address is missing a hostname
+return false
+}
+
+
+	return true;
+}
+
+function CheckInputs()
+{
+	var check_ok = true;
+	error = "Wrong input!\n";
+
+	check_ok = (is_0_valid('null') && check_ok);
+	check_ok = (is_46_valid(document.ProfileForm.inp_46.options[document.ProfileForm.inp_46.selectedIndex].value) && check_ok);
+	check_ok = (is_1_valid(document.ProfileForm.inp_1.value) && check_ok);
+	check_ok = (is_2_valid(document.ProfileForm.inp_2.value) && check_ok);
+	check_ok = (is_3_valid(document.ProfileForm.inp_3.value) && check_ok);
+	if(check_ok == false)
+		alert(error);
+	return check_ok;
+}
+//-->
+</script>
+
+
+<script language="javascript">
+function SubmitIt(){
+                if(CheckInputs() == true){
+                                if(window.onbeforesubmit)
+                                                onbeforesubmit();
+                                document.ProfileForm.submit();
+                }
+}
+
+function MailIt(){
+                if(CheckInputs()){
+                                if((document.ProfileForm.subject.value=='') || (document.ProfileForm.msg.value==''))
+                                                alert('Bitte f\u00fcr Sie die Nachrichtenfelder aus!');
+                                else
+                                                document.ProfileForm.submit();
+    }
+}
+
+function FieldWithName(frm, fieldname, numofield)
+{
+    if(!numofield)
+        numofield = 0;
+    field_count = 0;
+    for(i = 0; i < frm.elements.length; ++i)
+    {
+        if(frm.elements[i].name == fieldname)
+        {
+            if(field_count == numofield)
+                return frm.elements[i];
+            else
+                field_count++;
+        }
+    }
+}
+function NumChecked(frm, fieldname)
+{
+		var count = 0;
+		for(i = 0; i < frm.elements.length; ++i)
+		{
+				if(frm.elements[i].name == fieldname && frm.elements[i].checked == true)		
+						++count;
+		}
+		return count;
+}
+function NumSel(field)
+{
+    var count = 0;
+    for(i = 0; i < field.length; ++i)
+        if(field[i].selected == true) ++count;
+    return count;
+}
+</script>
+
+<script language="javascript">
+var multiFields = new Array();
+var dateFields = new Array();
+multiFields["interest[]"] = "interest"
+multiFields["optin"] = "optin"
+var arr_optin = new Array();
+arr_optin["True"] = "y";
+var arr_interest = new Array();
+</script>
+</body>
+</html>
